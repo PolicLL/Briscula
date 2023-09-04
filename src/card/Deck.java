@@ -21,7 +21,7 @@ public class Deck {
 
         for (CardType type : cardTypes) {
             for (CardValue value : cardValues) {
-                deckCards.add(new Card(type, value, 0));
+                deckCards.add(new Card(type, value));
             }
         }
     }

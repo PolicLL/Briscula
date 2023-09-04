@@ -72,6 +72,7 @@ public class Game {
         }
     }
 
+    // also check if all other players have no more cards
     private boolean isGameOver(){
         return this.deck.getNumberOfDeckCards() == 0;
     }
@@ -79,19 +80,19 @@ public class Game {
     private void playRound(){
         Player tempPlayer = null;
 
-        Queue<Card> queueCards = new ArrayDeque<>();
+        Queue<Move> queueMoves = new ArrayDeque<>();
 
         for(int i = 0; i < gameOptions.getNumberOfPlayers(); ++i){
             tempPlayer = players.get(indexOfCurrentPlayer);
 
             Card tempCard = tempPlayer.playRound();
 
-            queueCards.add(tempCard);
+            queueMoves.add(new Move(tempPlayer, tempCard));
 
             findNextPlayer();
         }
 
-        calculateRound(queueCards);
+        calculateRound(queueMoves);
     }
 
     private void findNextPlayer(){
@@ -101,17 +102,45 @@ public class Game {
             indexOfCurrentPlayer = 0;
     }
 
-    private void calculateRound(Queue<Card> queueCards){
-        CardType mainCardType = admin.getMainCardType();
-
+    private void calculateRound(Queue<Move> queueMoves){
         int tempPointsInRound = 0;
 
-        Player roundWinner = null;
+        Move roundWinner = queueMoves.peek();
 
-        roundWinner.incrementPoints(tempPointsInRound);
+        while(!queueMoves.isEmpty()){
+            Move tempMove = queueMoves.remove();
+
+            tempPointsInRound += tempMove.card().getPoints();
+
+            if(isFirstCardStronger(tempMove.card(), roundWinner.card()))
+                roundWinner = tempMove;
+
+        }
+
+        roundWinner.player().incrementPoints(tempPointsInRound);
+    }
+
+    public boolean isFirstCardStronger(Card firstPlayersCard, Card secondPlayersCard){
+        CardType mainCardType = admin.getMainCardType();
+
+        if(firstPlayersCard.isMainType(mainCardType)) {
+            if(!secondPlayersCard.isMainType(mainCardType)) return true;
+        }
+        else {
+            if(secondPlayersCard.isMainType(mainCardType)) return false;
+        }
+
+        if(firstPlayersCard.isSameType(secondPlayersCard)) return firstPlayersCard.isBigger(secondPlayersCard);
+
+        return false;
     }
 
     //
+
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
 
     @Override
     public String toString() {

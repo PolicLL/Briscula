@@ -2,7 +2,9 @@ import card.Deck;
 import main.Game;
 import other.GameOptions;
 
+import java.util.ArrayDeque;
 import java.util.Collections;
+import java.util.Queue;
 
 public class Briskula {
 
@@ -31,7 +33,15 @@ public class Briskula {
 
         System.out.println(game);
 
+        // Queue test
 
+        Queue<Integer> myQueue = new ArrayDeque<>();
+
+        myQueue.add(1);
+        myQueue.add(2);
+        myQueue.add(3);
+
+        System.out.println(myQueue.peek());
 
 
     }
