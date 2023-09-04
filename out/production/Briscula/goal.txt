@@ -1,0 +1,19 @@
+What should this program do ?
+
+Simulate card game Briscula.
+
+THREE OPTIONS
+
+It is possible to choose two options, play 1v1, 3 players in round and 2v2 where two people are playing against another two.
+
+There is an admin who is responsible for dealing cards and calculating points and deciding who won.
+
+HAVE OTHER PLAYERS AND PLAY BY YOURSELF
+
+- You should simulate other people playing and also make ability to play.
+- Make opponents "smart" in some level
+
+
+BONUS
+
+- You could simulate game using threads.
