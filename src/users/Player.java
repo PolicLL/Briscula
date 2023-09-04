@@ -3,6 +3,7 @@ package users;
 import card.Card;
 
 import java.util.List;
+import java.util.Random;
 
 public class Player {
 
@@ -12,14 +13,28 @@ public class Player {
 
     private int points = 0;
 
+    private Random random = new Random();
+
     public Player(List<Card> playerCards, String nickname) {
         this.playerCards = playerCards;
         this.nickname = nickname;
     }
 
-    public void printCards(){
-        this.playerCards.forEach(element -> System.out.print(element + " "));
+    //
+
+    public Card playRound(){
+        Card tempCard = playerCards.get(random.nextInt(playerCards.size()));
+        playerCards.remove(tempCard);
+
+        return tempCard;
     }
+
+    public void incrementPoints(int points){
+        this.points += points;
+    }
+
+    //
+
 
     public int getPoints() {
         return points;

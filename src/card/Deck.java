@@ -35,6 +35,10 @@ public class Deck {
         return deckCards;
     }
 
+    public int getNumberOfDeckCards(){
+        return this.deckCards.size();
+    }
+
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder("\n");

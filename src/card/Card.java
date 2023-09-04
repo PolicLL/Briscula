@@ -7,8 +7,7 @@ public record Card(CardType cardType, CardValue cardValue, int cardPoints) {
         return String.format("%s-%s", cardType.toString(), cardValue.toString());
     }
 
-    @Override
-    public int cardPoints() {
+    public int getCardPoints() {
         return this.cardValue.getPoints();
     }
 }
