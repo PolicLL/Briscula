@@ -34,7 +34,7 @@ public class Deck {
     public List<Card> getDeckCards() {
         return deckCards;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder("\n");

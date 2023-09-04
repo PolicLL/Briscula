@@ -8,21 +8,21 @@ public class Player {
 
     private List<Card> playerCards;
 
-    public Player(List<Card> playerCards) {
+    private String nickname;
+
+    private int points = 0;
+
+    public Player(List<Card> playerCards, String nickname) {
         this.playerCards = playerCards;
+        this.nickname = nickname;
     }
 
     public void printCards(){
         this.playerCards.forEach(element -> System.out.print(element + " "));
     }
 
-    public int getPoints(){
-        int numberOfPoints = 0;
-
-        for(Card card : playerCards)
-            numberOfPoints += card.cardPoints();
-
-        return  numberOfPoints;
+    public int getPoints() {
+        return points;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package users;
 
 import card.Card;
+import card.CardType;
 import card.Deck;
 import other.GameOptions;
 
@@ -13,6 +14,8 @@ public class Admin {
 
     private final Random random = new Random();
 
+    private CardType mainCardType;
+
     public List<List<Card>> dealCards(Deck deck, GameOptions gameOptions){
         List<List<Card>> playersCardsList = new ArrayList<>();
         List<Card> deckCards = deck.getDeckCards();
@@ -21,7 +24,7 @@ public class Admin {
 
         for(int i = 0; i < gameOptions.getNumberOfPlayers(); ++i){
 
-            playersCardsList.set(i, new LinkedList<>());
+            playersCardsList.add(new LinkedList<>());
 
             for(int j = 0; j < startNumberOfCards; ++j){
                 Card tempCard = deckCards.get(random.nextInt(deckCards.size()));
@@ -30,7 +33,18 @@ public class Admin {
             }
         }
 
+        chooseMainCardType();
+
         return playersCardsList;
+    }
+
+    private void chooseMainCardType(){
+        CardType[] cardTypes = CardType.values();
+        mainCardType = cardTypes[random.nextInt(cardTypes.length)];
+    }
+
+    public CardType getMainCardType() {
+        return mainCardType;
     }
 
     private int getStartNumberOfCards(GameOptions gameOptions){

@@ -35,9 +35,7 @@ public class Game {
 
         List<List<Card>> playersCards =  admin.dealCards(deck, gameOptions);
 
-        for(int i = 0; i < gameOptions.getNumberOfPlayers(); ++i){
-            addPlayer(new Player(playersCards.get(i)));
-        }
+        initializePlayers(gameOptions, playersCards);
     }
 
     private void prepareDeck(){
@@ -45,6 +43,12 @@ public class Game {
             deck.removeOneCard();
     }
 
+    private void initializePlayers(GameOptions gameOptions, List<List<Card>> playersCards) {
+        for(int i = 0; i < gameOptions.getNumberOfPlayers(); ++i){
+            addPlayer(new Player(playersCards.get(i), "Name " + i));
+        }
+    }
+    
     private void addPlayer(Player player){
         this.players.add(player);
     }
@@ -54,7 +58,7 @@ public class Game {
         String output = "";
 
         for(Player player : players)
-            output += String.format("Player's cards : %s | Points : %d", player, player.getPoints());
+            output += String.format("Player's cards : %s | Points : %d\n", player, player.getPoints());
 
         return output;
     }

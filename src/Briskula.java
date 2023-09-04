@@ -1,4 +1,6 @@
 import card.Deck;
+import main.Game;
+import other.GameOptions;
 
 import java.util.Collections;
 
@@ -23,6 +25,12 @@ public class Briskula {
         //
 
         //deck.dealCards(6);
+
+        Game game = new Game(GameOptions.TWO_PLAYERS);
+
+
+        System.out.println(game);
+
 
 
 
