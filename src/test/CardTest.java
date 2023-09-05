@@ -22,12 +22,12 @@ import static org.mockito.Mockito.when;
 public class CardTest {
 
     private Game game;
+    private CardType mainCardType = CardType.COPPE;
 
     @BeforeMethod
     public void setUp() {
 
         Admin adminMock = mock(Admin.class);
-        CardType mainCardType = CardType.COPPE;
 
         when(adminMock.getMainCardType()).thenReturn(mainCardType);
 
@@ -55,17 +55,17 @@ public class CardTest {
         Card firstPlayersCard = new Card(CardType.SPADE, CardValue.ACE);
         Card secondPlayersCard = new Card(CardType.DENARI, CardValue.TWO);
 
-        boolean result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertTrue(result);
+        boolean result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertFalse(result);
 
         secondPlayersCard.setCardType(CardType.SPADE);
         secondPlayersCard.setCardValue(CardValue.THREE);
-        result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertTrue(result);
+        result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertFalse(result);
 
         firstPlayersCard.setCardValue(CardValue.JACK);
-        result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertFalse(result);
+        result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertTrue(result);
     }
 
     @Test
@@ -73,13 +73,13 @@ public class CardTest {
         Card firstPlayersCard = new Card(CardType.COPPE, CardValue.TWO);
         Card secondPlayersCard = new Card(CardType.DENARI, CardValue.TWO);
 
-        boolean result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertTrue(result);
+        boolean result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertFalse(result);
 
         secondPlayersCard.setCardType(CardType.SPADE);
         secondPlayersCard.setCardValue(CardValue.THREE);
-        result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertTrue(result);
+        result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertFalse(result);
     }
 
     @Test
@@ -87,12 +87,12 @@ public class CardTest {
         Card firstPlayersCard = new Card(CardType.SPADE, CardValue.TWO);
         Card secondPlayersCard = new Card(CardType.COPPE, CardValue.ACE);
 
-        boolean result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertFalse(result);
+        boolean result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertTrue(result);
 
         secondPlayersCard.setCardValue(CardValue.TWO);
-        result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertFalse(result);
+        result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertTrue(result);
     }
 
     @Test
@@ -100,11 +100,11 @@ public class CardTest {
         Card firstPlayersCard = new Card(CardType.COPPE, CardValue.TWO);
         Card secondPlayersCard = new Card(CardType.COPPE, CardValue.THREE);
 
-        boolean result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertFalse(result);
+        boolean result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertTrue(result);
 
         firstPlayersCard.setCardValue(CardValue.ACE);
-        result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertTrue(result);
+        result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertFalse(result);
     }
 }

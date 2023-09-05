@@ -12,9 +12,7 @@ import other.GameOptions;
 import users.Admin;
 import users.Player;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Queue;
+import java.util.*;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,11 +21,33 @@ public class GameTest {
 
     private Game game;
     private Queue<Move> queueMoves = new ArrayDeque<>();
+    private List<Player> playerList = new ArrayList<>(Arrays.asList(
+            new Player(new ArrayList<>(), "Name 1"),
+            new Player(new ArrayList<>(), "Name 2"),
+            new Player(new ArrayList<>(), "Name 3"),
+            new Player(new ArrayList<>(), "Name 4")
+            ));
+
+    private List<Card> cardsList = new ArrayList<>(Arrays.asList(
+            new Card(CardType.SPADE, CardValue.THREE),
+            new Card(CardType.COPPE, CardValue.TWO),
+            new Card(CardType.DENARI, CardValue.JACK),
+            new Card(CardType.COPPE, CardValue.KING)
+    ));
+
+    private List<Move> movesList = new ArrayList<>(Arrays.asList(
+            new Move(playerList.get(0), cardsList.get(0)),
+            new Move(playerList.get(1), cardsList.get(1)),
+            new Move(playerList.get(2), cardsList.get(2)),
+            new Move(playerList.get(3), cardsList.get(3))
+    ));
+
+
 
     @BeforeMethod
     public void setUp() {
         Admin adminMock = mock(Admin.class);
-        CardType mainCardType = CardType.COPPE;
+        final CardType mainCardType = CardType.COPPE;
 
         when(adminMock.getMainCardType()).thenReturn(mainCardType);
 
@@ -41,28 +61,45 @@ public class GameTest {
     @Test
     public void TestRound() {
 
-        Player player1 = new Player(new ArrayList<>(), "Name 1");
-        Player player2 = new Player(new ArrayList<>(), "Name 2");
-        Player player3 = new Player(new ArrayList<>(), "Name 3");
-        Player player4 = new Player(new ArrayList<>(), "Name 4");
-
-        Card card1 = new Card(CardType.SPADE, CardValue.THREE);
-        Card card2 = new Card(CardType.COPPE, CardValue.TWO);
-        Card card3 = new Card(CardType.DENARI, CardValue.JACK);
-        Card card4 = new Card(CardType.COPPE, CardValue.KING);
-
-        Move move1 = new Move(player1, card1);
-        Move move2 = new Move(player2, card2);
-        Move move3 = new Move(player3, card3);
-        Move move4 = new Move(player4, card4);
-
-        queueMoves.add(move1);
-        queueMoves.add(move2);
-        queueMoves.add(move3);
-        queueMoves.add(move4);
+        queueMoves.add(movesList.get(0));
+        queueMoves.add(movesList.get(1));
+        queueMoves.add(movesList.get(2));
+        queueMoves.add(movesList.get(3));
 
         game.calculateRound(queueMoves);
 
-        Assert.assertEquals(16, player4.getPoints());
+        Assert.assertEquals(16, playerList.get(3).getPoints());
+    }
+
+    @Test
+    public void TestRound2() {
+
+        cardsList.get(0).setCardType(CardType.DENARI);
+        cardsList.get(0).setCardValue(CardValue.THREE);
+
+        cardsList.get(1).setCardType(CardType.DENARI);
+        cardsList.get(1).setCardValue(CardValue.ACE);
+
+        cardsList.get(2).setCardType(CardType.BASTONI);
+        cardsList.get(2).setCardValue(CardValue.JACK);
+
+        cardsList.get(3).setCardType(CardType.BASTONI);
+        cardsList.get(3).setCardValue(CardValue.SEVEN);
+
+        queueMoves.add(movesList.get(0));
+        queueMoves.add(movesList.get(1));
+        queueMoves.add(movesList.get(2));
+        queueMoves.add(movesList.get(3));
+
+        game.calculateRound(queueMoves);
+
+        printPlayers();
+
+        Assert.assertEquals(23, playerList.get(1).getPoints());
+    }
+
+    private void printPlayers(){
+        for(Player player : playerList)
+            System.out.println(player.getPoints());
     }
 }

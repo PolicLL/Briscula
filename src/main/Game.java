@@ -121,18 +121,19 @@ public class Game {
 
             tempPointsInRound += tempMove.card().getPoints();
 
-            if(isFirstCardStronger(tempMove.card(), roundWinnerMove.card()))
+            if(isSecondCardStronger(roundWinnerMove.card(), tempMove.card()))
                 roundWinnerMove = tempMove;
         }
 
         roundWinnerMove.player().incrementPoints(tempPointsInRound);
     }
 
-    public boolean isFirstCardStronger(Card firstPlayersCard, Card secondPlayersCard){
+/*
+    public boolean isSecondCardStronger(Card firstPlayersCard, Card secondPlayersCard){
         CardType mainCardType = admin.getMainCardType();
 
         if(firstPlayersCard.isMainType(mainCardType)) {
-            if(!secondPlayersCard.isMainType(mainCardType)) return true;
+            if(!secondPlayersCard.isMainType(mainCardType)) return false;
         }
         else {
             if(secondPlayersCard.isMainType(mainCardType)) {
@@ -143,6 +144,24 @@ public class Game {
         if(firstPlayersCard.isSameType(secondPlayersCard)) return firstPlayersCard.isCardValueBiggerThan(secondPlayersCard);
 
         return true;
+    }
+ */
+
+    public boolean isSecondCardStronger(Card firstPlayersCard, Card secondPlayersCard){
+        CardType mainCardType = admin.getMainCardType();
+
+        if(!firstPlayersCard.isMainType(mainCardType) && secondPlayersCard.isMainType(mainCardType)){
+            return true;
+        }
+        else if(firstPlayersCard.isMainType(mainCardType) && secondPlayersCard.isMainType(mainCardType)){
+            return secondPlayersCard.isCardValueBiggerThan(firstPlayersCard);
+        }
+
+        else if(firstPlayersCard.isSameType(secondPlayersCard)){
+            return secondPlayersCard.isCardValueBiggerThan(firstPlayersCard);
+        }
+
+        return false;
     }
 
     //
