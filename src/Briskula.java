@@ -1,14 +1,10 @@
-import card.Deck;
-import main.Game;
-import other.GameOptions;
-
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.Queue;
+import card.CardType;
 
 public class Briskula {
 
     public static void main(String[] args){
+
+        /*
 
         Deck deck = new Deck();
 
@@ -43,6 +39,12 @@ public class Briskula {
 
         System.out.println(myQueue.peek());
 
+         */
+
+
+        CardType test = CardType.DENARI;
+
+        System.out.println(test == CardType.DENARI);
 
     }
 }

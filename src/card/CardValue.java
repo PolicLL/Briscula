@@ -1,5 +1,6 @@
 package card;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public enum CardValue {
@@ -8,7 +9,7 @@ public enum CardValue {
     KNIGHT(3), KING(4),
     THREE(10), ACE(11);
 
-    private static Map<CardValue, Integer> cardValuesMap;
+    private static Map<CardValue, Integer> cardValuesMap = new HashMap<>();
 
     static {
         CardValue[] cardValues = CardValue.values();
@@ -27,8 +28,8 @@ public enum CardValue {
         return points;
     }
 
-    public boolean isBigger(CardValue tempCardValue){
-        return cardValuesMap.get(tempCardValue) > cardValuesMap.get(this);
+    public boolean isBiggerThan(CardValue tempCardValue){
+        return cardValuesMap.get(this) > cardValuesMap.get(tempCardValue);
     }
 
     @Override

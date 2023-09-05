@@ -18,6 +18,8 @@ public class Player {
     public Player(List<Card> playerCards, String nickname) {
         this.playerCards = playerCards;
         this.nickname = nickname;
+
+        this.points = 0;
     }
 
     //
@@ -27,6 +29,10 @@ public class Player {
         playerCards.remove(tempCard);
 
         return tempCard;
+    }
+
+    public boolean isPlayerDone(){
+        return this.playerCards.size() == 0;
     }
 
     public void incrementPoints(int points){

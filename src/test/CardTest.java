@@ -4,6 +4,8 @@ import card.Card;
 import card.CardType;
 import card.CardValue;
 import main.Game;
+import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import other.GameOptions;
 import users.Admin;
@@ -11,38 +13,98 @@ import users.Admin;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * This test class is responsible for testing Card functions
+ * It has testcases which are responsible for checking does comparison between
+ * different Card objects works correctly.
+ */
+
 public class CardTest {
 
+    private Game game;
 
-    @Test
-    public void CardTestComparison() {
+    @BeforeMethod
+    public void setUp() {
 
+        Admin adminMock = mock(Admin.class);
+        CardType mainCardType = CardType.COPPE;
+
+        when(adminMock.getMainCardType()).thenReturn(mainCardType);
+
+        game = new Game(GameOptions.TWO_PLAYERS);
+        game.setAdmin(adminMock);
     }
 
     @Test
-    public void testIsFirstCardStronger() {
-        // Create a mock admin object
-        Admin admin = mock(Admin.class);
+    public void IsCardValueBiggerThanComparison() {
 
-        // Define the return value when getMainCardType() is called
-        when(admin.getMainCardType()).thenReturn(CardType.SPADE);
+        Card mainCard = new Card(CardType.SPADE, CardValue.ACE);
+        Card secondCard = new Card(CardType.SPADE, CardValue.THREE);
+        Assert.assertTrue(mainCard.isCardValueBiggerThan(secondCard));
 
-        // Create an instance of your class under test and inject the mock admin
-        Game yourClassUnderTest = new Game(GameOptions.TWO_PLAYERS);
+        secondCard.setCardValue(CardValue.FOUR);
+        Assert.assertTrue(mainCard.isCardValueBiggerThan(secondCard));
 
-        yourClassUnderTest.setAdmin(admin);
+        secondCard.setCardValue(CardValue.THREE);
+        Assert.assertTrue(mainCard.isCardValueBiggerThan(secondCard));
+    }
 
+    @Test
+    public void testBothCardsAreNotMainCardType() {
 
         Card firstPlayersCard = new Card(CardType.SPADE, CardValue.ACE);
-        Card secondPlayersCard = new Card(CardType.DENARI, CardValue.ACE);
+        Card secondPlayersCard = new Card(CardType.DENARI, CardValue.TWO);
 
-        boolean result = yourClassUnderTest.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
+        boolean result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertTrue(result);
 
+        secondPlayersCard.setCardType(CardType.SPADE);
+        secondPlayersCard.setCardValue(CardValue.THREE);
+        result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertTrue(result);
 
+        firstPlayersCard.setCardValue(CardValue.JACK);
+        result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertFalse(result);
     }
 
+    @Test
+    public void testFirstCardMainType() {
+        Card firstPlayersCard = new Card(CardType.COPPE, CardValue.TWO);
+        Card secondPlayersCard = new Card(CardType.DENARI, CardValue.TWO);
 
+        boolean result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertTrue(result);
 
+        secondPlayersCard.setCardType(CardType.SPADE);
+        secondPlayersCard.setCardValue(CardValue.THREE);
+        result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertTrue(result);
+    }
 
+    @Test
+    public void testSecondCardMainType() {
+        Card firstPlayersCard = new Card(CardType.SPADE, CardValue.TWO);
+        Card secondPlayersCard = new Card(CardType.COPPE, CardValue.ACE);
+
+        boolean result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertFalse(result);
+
+        secondPlayersCard.setCardValue(CardValue.TWO);
+        result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertFalse(result);
+    }
+
+    @Test
+    public void testBothCardsMainType() {
+        Card firstPlayersCard = new Card(CardType.COPPE, CardValue.TWO);
+        Card secondPlayersCard = new Card(CardType.COPPE, CardValue.THREE);
+
+        boolean result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertFalse(result);
+
+        firstPlayersCard.setCardValue(CardValue.ACE);
+        result = game.isFirstCardStronger(firstPlayersCard, secondPlayersCard);
+        Assert.assertTrue(result);
+    }
 }
-

@@ -74,7 +74,15 @@ public class Game {
 
     // also check if all other players have no more cards
     private boolean isGameOver(){
-        return this.deck.getNumberOfDeckCards() == 0;
+        return this.deck.getNumberOfDeckCards() == 0 && arePlayersDone();
+    }
+
+    private boolean arePlayersDone(){
+        for(Player tempPlayer : players)
+            if(!tempPlayer.isPlayerDone())
+                return false;
+
+        return true;
     }
 
     private void playRound(){
@@ -102,22 +110,22 @@ public class Game {
             indexOfCurrentPlayer = 0;
     }
 
-    private void calculateRound(Queue<Move> queueMoves){
+    public void calculateRound(Queue<Move> queueMoves){
         int tempPointsInRound = 0;
 
-        Move roundWinner = queueMoves.peek();
+        Move roundWinnerMove = queueMoves.remove();
+        tempPointsInRound += roundWinnerMove.card().getPoints();
 
         while(!queueMoves.isEmpty()){
             Move tempMove = queueMoves.remove();
 
             tempPointsInRound += tempMove.card().getPoints();
 
-            if(isFirstCardStronger(tempMove.card(), roundWinner.card()))
-                roundWinner = tempMove;
-
+            if(isFirstCardStronger(tempMove.card(), roundWinnerMove.card()))
+                roundWinnerMove = tempMove;
         }
 
-        roundWinner.player().incrementPoints(tempPointsInRound);
+        roundWinnerMove.player().incrementPoints(tempPointsInRound);
     }
 
     public boolean isFirstCardStronger(Card firstPlayersCard, Card secondPlayersCard){
@@ -127,12 +135,14 @@ public class Game {
             if(!secondPlayersCard.isMainType(mainCardType)) return true;
         }
         else {
-            if(secondPlayersCard.isMainType(mainCardType)) return false;
+            if(secondPlayersCard.isMainType(mainCardType)) {
+                return false;
+            }
         }
 
-        if(firstPlayersCard.isSameType(secondPlayersCard)) return firstPlayersCard.isBigger(secondPlayersCard);
+        if(firstPlayersCard.isSameType(secondPlayersCard)) return firstPlayersCard.isCardValueBiggerThan(secondPlayersCard);
 
-        return false;
+        return true;
     }
 
     //
