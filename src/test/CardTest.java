@@ -3,6 +3,7 @@ package test;
 import card.Card;
 import card.CardType;
 import card.CardValue;
+import exceptions.DuplicateCardException;
 import main.Game;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -12,6 +13,8 @@ import users.Admin;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertThrows;
 
 /**
  * This test class is responsible for testing Card functions
@@ -50,18 +53,18 @@ public class CardTest {
     }
 
     @Test
-    public void testBothCardsAreNotMainCardType() {
+    public void testBothCardsAreNotMainCardType() throws DuplicateCardException {
 
         Card firstPlayersCard = new Card(CardType.SPADE, CardValue.ACE);
         Card secondPlayersCard = new Card(CardType.DENARI, CardValue.TWO);
 
         boolean result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertFalse(result);
+        assertFalse(result);
 
         secondPlayersCard.setCardType(CardType.SPADE);
         secondPlayersCard.setCardValue(CardValue.THREE);
         result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertFalse(result);
+        assertFalse(result);
 
         firstPlayersCard.setCardValue(CardValue.JACK);
         result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
@@ -69,21 +72,21 @@ public class CardTest {
     }
 
     @Test
-    public void testFirstCardMainType() {
+    public void testFirstCardMainType() throws DuplicateCardException {
         Card firstPlayersCard = new Card(CardType.COPPE, CardValue.TWO);
         Card secondPlayersCard = new Card(CardType.DENARI, CardValue.TWO);
 
         boolean result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertFalse(result);
+        assertFalse(result);
 
         secondPlayersCard.setCardType(CardType.SPADE);
         secondPlayersCard.setCardValue(CardValue.THREE);
         result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertFalse(result);
+        assertFalse(result);
     }
 
     @Test
-    public void testSecondCardMainType() {
+    public void testSecondCardMainType() throws DuplicateCardException {
         Card firstPlayersCard = new Card(CardType.SPADE, CardValue.TWO);
         Card secondPlayersCard = new Card(CardType.COPPE, CardValue.ACE);
 
@@ -96,7 +99,7 @@ public class CardTest {
     }
 
     @Test
-    public void testBothCardsMainType() {
+    public void testBothCardsMainType() throws DuplicateCardException {
         Card firstPlayersCard = new Card(CardType.COPPE, CardValue.TWO);
         Card secondPlayersCard = new Card(CardType.COPPE, CardValue.THREE);
 
@@ -105,6 +108,17 @@ public class CardTest {
 
         firstPlayersCard.setCardValue(CardValue.ACE);
         result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertFalse(result);
+        assertFalse(result);
+    }
+
+    @Test
+    public void testException() {
+        Card firstPlayersCard = new Card(CardType.COPPE, CardValue.TWO);
+        Card secondPlayersCard = new Card(CardType.COPPE, CardValue.TWO);
+
+        // Use assertThrows to check for the expected exception
+        assertThrows(DuplicateCardException.class, () -> {
+            game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
+        });
     }
 }

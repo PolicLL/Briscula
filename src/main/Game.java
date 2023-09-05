@@ -3,6 +3,7 @@ package main;
 import card.Card;
 import card.CardType;
 import card.Deck;
+import exceptions.DuplicateCardException;
 import other.GameOptions;
 import users.Admin;
 import users.Player;
@@ -110,7 +111,7 @@ public class Game {
             indexOfCurrentPlayer = 0;
     }
 
-    public void calculateRound(Queue<Move> queueMoves){
+    public void calculateRound(Queue<Move> queueMoves)  {
         int tempPointsInRound = 0;
 
         Move roundWinnerMove = queueMoves.remove();
@@ -121,8 +122,12 @@ public class Game {
 
             tempPointsInRound += tempMove.card().getPoints();
 
-            if(isSecondCardStronger(roundWinnerMove.card(), tempMove.card()))
-                roundWinnerMove = tempMove;
+            try {
+                if(isSecondCardStronger(roundWinnerMove.card(), tempMove.card()))
+                    roundWinnerMove = tempMove;
+            } catch (DuplicateCardException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         roundWinnerMove.player().incrementPoints(tempPointsInRound);
@@ -147,8 +152,11 @@ public class Game {
     }
  */
 
-    public boolean isSecondCardStronger(Card firstPlayersCard, Card secondPlayersCard){
+    public boolean isSecondCardStronger(Card firstPlayersCard, Card secondPlayersCard) throws DuplicateCardException {
         CardType mainCardType = admin.getMainCardType();
+
+        if(firstPlayersCard.equals(secondPlayersCard))
+            throw new DuplicateCardException();
 
         if(!firstPlayersCard.isMainType(mainCardType) && secondPlayersCard.isMainType(mainCardType)){
             return true;

@@ -43,11 +43,11 @@ public class GameTest {
     ));
 
 
+    final CardType mainCardType = CardType.COPPE;
 
     @BeforeMethod
     public void setUp() {
         Admin adminMock = mock(Admin.class);
-        final CardType mainCardType = CardType.COPPE;
 
         when(adminMock.getMainCardType()).thenReturn(mainCardType);
 
@@ -98,8 +98,61 @@ public class GameTest {
         Assert.assertEquals(23, playerList.get(1).getPoints());
     }
 
+    @Test
+    public void TestRound3() {
+
+        cardsList.get(0).setCardType(CardType.DENARI);
+        cardsList.get(0).setCardValue(CardValue.THREE);
+
+        cardsList.get(1).setCardType(CardType.DENARI);
+        cardsList.get(1).setCardValue(CardValue.SEVEN);
+
+        cardsList.get(2).setCardType(CardType.BASTONI);
+        cardsList.get(2).setCardValue(CardValue.JACK);
+
+        cardsList.get(3).setCardType(CardType.BASTONI);
+        cardsList.get(3).setCardValue(CardValue.SEVEN);
+
+        queueMoves.add(movesList.get(0));
+        queueMoves.add(movesList.get(1));
+        queueMoves.add(movesList.get(2));
+        queueMoves.add(movesList.get(3));
+
+        game.calculateRound(queueMoves);
+
+        printPlayers();
+
+        Assert.assertEquals(12, playerList.get(0).getPoints());
+    }
+
+    @Test
+    public void TestRound4() {
+
+        cardsList.get(0).setCardType(CardType.DENARI);
+        cardsList.get(0).setCardValue(CardValue.THREE);
+
+        cardsList.get(1).setCardType(CardType.DENARI);
+        cardsList.get(1).setCardValue(CardValue.SEVEN);
+
+        cardsList.get(2).setCardType(CardType.BASTONI);
+        cardsList.get(2).setCardValue(CardValue.JACK);
+
+        cardsList.get(3).setCardType(CardType.COPPE);
+        cardsList.get(3).setCardValue(CardValue.TWO);
+
+        queueMoves.add(movesList.get(0));
+        queueMoves.add(movesList.get(1));
+        queueMoves.add(movesList.get(2));
+        queueMoves.add(movesList.get(3));
+
+        game.calculateRound(queueMoves);
+
+        printPlayers();
+
+        Assert.assertEquals(12, playerList.get(0).getPoints());
+    }
+
     private void printPlayers(){
-        for(Player player : playerList)
-            System.out.println(player.getPoints());
+        playerList.forEach(element -> System.out.println(element.getPoints()));
     }
 }

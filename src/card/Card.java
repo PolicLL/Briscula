@@ -1,5 +1,7 @@
 package card;
 
+import java.util.Objects;
+
 public class Card {
 
     private CardType cardType;
@@ -8,6 +10,19 @@ public class Card {
     public Card(CardType cardType, CardValue cardValue) {
         this.cardType = cardType;
         this.cardValue = cardValue;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return cardType == card.cardType && cardValue == card.cardValue;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cardType, cardValue);
     }
 
     @Override
