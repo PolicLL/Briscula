@@ -46,6 +46,10 @@ public class Player {
         return points;
     }
 
+    public void setPointsToZero(){
+        this.points = 0;
+    }
+
     @Override
     public String toString() {
         String output = "";

@@ -7,6 +7,9 @@ public class Card {
     private CardType cardType;
     private CardValue cardValue;
 
+    public Card() {
+    }
+
     public Card(CardType cardType, CardValue cardValue) {
         this.cardType = cardType;
         this.cardValue = cardValue;

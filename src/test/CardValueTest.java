@@ -23,5 +23,22 @@ public class CardValueTest {
         Assert.assertFalse(mainCardValue.isBiggerThan(CardValue.THREE));
     }
 
+    @Test
+    public void TestForTwo() {
+
+        CardValue mainCardValue = CardValue.TWO;
+
+        Assert.assertFalse(mainCardValue.isBiggerThan(CardValue.THREE));
+        Assert.assertFalse(mainCardValue.isBiggerThan(CardValue.FOUR));
+        Assert.assertFalse(mainCardValue.isBiggerThan(CardValue.FIVE));
+        Assert.assertFalse(mainCardValue.isBiggerThan(CardValue.SIX));
+        Assert.assertFalse(mainCardValue.isBiggerThan(CardValue.SEVEN));
+        Assert.assertFalse(mainCardValue.isBiggerThan(CardValue.JACK));
+        Assert.assertFalse(mainCardValue.isBiggerThan(CardValue.KNIGHT));
+        Assert.assertFalse(mainCardValue.isBiggerThan(CardValue.KING));
+        Assert.assertFalse(mainCardValue.isBiggerThan(CardValue.THREE));
+        Assert.assertFalse(mainCardValue.isBiggerThan(CardValue.ACE));
+    }
+
 }
 

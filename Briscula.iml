@@ -41,7 +41,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../values/mockito-core-5.5.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../Mockito/byte-buddy-1.14.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -50,7 +50,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../values/byte-buddy-1.14.6.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../Mockito/byte-buddy-agent-1.14.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -59,7 +59,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../values/byte-buddy-agent-1.14.6.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../Mockito/mockito-core-5.5.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -68,7 +68,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../values/objenesis-3.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../Mockito/objenesis-3.3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

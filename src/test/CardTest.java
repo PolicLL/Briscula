@@ -26,99 +26,119 @@ public class CardTest {
 
     private Game game;
     private CardType mainCardType = CardType.COPPE;
+    private Card firstCard, secondCard;
 
     @BeforeMethod
     public void setUp() {
-
         Admin adminMock = mock(Admin.class);
-
         when(adminMock.getMainCardType()).thenReturn(mainCardType);
 
         game = new Game(GameOptions.TWO_PLAYERS);
         game.setAdmin(adminMock);
+
+        firstCard = new Card();
+        secondCard = new Card();
     }
 
     @Test
-    public void IsCardValueBiggerThanComparison() {
+    public void TestNonMainTypeCards() {
 
-        Card mainCard = new Card(CardType.SPADE, CardValue.ACE);
-        Card secondCard = new Card(CardType.SPADE, CardValue.THREE);
-        Assert.assertTrue(mainCard.isCardValueBiggerThan(secondCard));
+        firstCard.setCardType(CardType.SPADE);
+        firstCard.setCardValue(CardValue.ACE);
+
+        secondCard.setCardType(CardType.SPADE);
+        secondCard.setCardValue(CardValue.THREE);
+
+        // ASSERTS
+
+        Assert.assertTrue(firstCard.isCardValueBiggerThan(secondCard));
 
         secondCard.setCardValue(CardValue.FOUR);
-        Assert.assertTrue(mainCard.isCardValueBiggerThan(secondCard));
+        Assert.assertTrue(firstCard.isCardValueBiggerThan(secondCard));
 
         secondCard.setCardValue(CardValue.THREE);
-        Assert.assertTrue(mainCard.isCardValueBiggerThan(secondCard));
+        Assert.assertTrue(firstCard.isCardValueBiggerThan(secondCard));
     }
 
     @Test
-    public void testBothCardsAreNotMainCardType() throws DuplicateCardException {
+    public void TestBothCardsAreNotMainCardType() throws DuplicateCardException {
+        firstCard.setCardType(CardType.SPADE);
+        firstCard.setCardValue(CardValue.ACE);
 
-        Card firstPlayersCard = new Card(CardType.SPADE, CardValue.ACE);
-        Card secondPlayersCard = new Card(CardType.DENARI, CardValue.TWO);
+        secondCard.setCardType(CardType.DENARI);
+        secondCard.setCardValue(CardValue.TWO);
 
-        boolean result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        assertFalse(result);
+        // ASSERTS
 
-        secondPlayersCard.setCardType(CardType.SPADE);
-        secondPlayersCard.setCardValue(CardValue.THREE);
-        result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        assertFalse(result);
+        assertFalse(game.isSecondCardStronger(firstCard, secondCard));
 
-        firstPlayersCard.setCardValue(CardValue.JACK);
-        result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertTrue(result);
+        secondCard.setCardType(CardType.SPADE);
+        secondCard.setCardValue(CardValue.THREE);
+        assertFalse(game.isSecondCardStronger(firstCard, secondCard));
+
+        firstCard.setCardValue(CardValue.JACK);
+        Assert.assertTrue(game.isSecondCardStronger(firstCard, secondCard));
     }
 
     @Test
-    public void testFirstCardMainType() throws DuplicateCardException {
-        Card firstPlayersCard = new Card(CardType.COPPE, CardValue.TWO);
-        Card secondPlayersCard = new Card(CardType.DENARI, CardValue.TWO);
+    public void TestFirstCardMainType() throws DuplicateCardException {
+        firstCard.setCardType(CardType.SPADE);
+        firstCard.setCardValue(CardValue.ACE);
 
-        boolean result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        assertFalse(result);
+        secondCard.setCardType(CardType.DENARI);
+        secondCard.setCardValue(CardValue.TWO);
 
-        secondPlayersCard.setCardType(CardType.SPADE);
-        secondPlayersCard.setCardValue(CardValue.THREE);
-        result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        assertFalse(result);
+        // ASSERTS
+
+        assertFalse(game.isSecondCardStronger(firstCard, secondCard));
+
+        secondCard.setCardType(CardType.SPADE);
+        secondCard.setCardValue(CardValue.THREE);
+        assertFalse(game.isSecondCardStronger(firstCard, secondCard));
     }
 
     @Test
-    public void testSecondCardMainType() throws DuplicateCardException {
-        Card firstPlayersCard = new Card(CardType.SPADE, CardValue.TWO);
-        Card secondPlayersCard = new Card(CardType.COPPE, CardValue.ACE);
+    public void TestSecondCardMainType() throws DuplicateCardException {
+        firstCard.setCardType(CardType.SPADE);
+        firstCard.setCardValue(CardValue.ACE);
 
-        boolean result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertTrue(result);
+        secondCard.setCardType(CardType.COPPE);
+        secondCard.setCardValue(CardValue.TWO);
 
-        secondPlayersCard.setCardValue(CardValue.TWO);
-        result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertTrue(result);
+        // ASSERTS
+
+        Assert.assertTrue(game.isSecondCardStronger(firstCard, secondCard));
+
+        secondCard.setCardValue(CardValue.TWO);
+        Assert.assertTrue(game.isSecondCardStronger(firstCard, secondCard));
     }
 
     @Test
-    public void testBothCardsMainType() throws DuplicateCardException {
-        Card firstPlayersCard = new Card(CardType.COPPE, CardValue.TWO);
-        Card secondPlayersCard = new Card(CardType.COPPE, CardValue.THREE);
+    public void TestBothCardsMainType() throws DuplicateCardException {
+        firstCard.setCardType(CardType.COPPE);
+        firstCard.setCardValue(CardValue.TWO);
 
-        boolean result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        Assert.assertTrue(result);
+        secondCard.setCardType(CardType.COPPE);
+        secondCard.setCardValue(CardValue.THREE);
 
-        firstPlayersCard.setCardValue(CardValue.ACE);
-        result = game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
-        assertFalse(result);
+        // ASSERTS
+
+        Assert.assertTrue(game.isSecondCardStronger(firstCard, secondCard));
+
+        firstCard.setCardValue(CardValue.ACE);
+        assertFalse(game.isSecondCardStronger(firstCard, secondCard));
     }
 
     @Test
-    public void testException() {
-        Card firstPlayersCard = new Card(CardType.COPPE, CardValue.TWO);
-        Card secondPlayersCard = new Card(CardType.COPPE, CardValue.TWO);
+    public void TestDuplicateCardException() {
+        firstCard.setCardType(CardType.COPPE);
+        firstCard.setCardValue(CardValue.TWO);
 
-        // Use assertThrows to check for the expected exception
+        secondCard.setCardType(CardType.COPPE);
+        secondCard.setCardValue(CardValue.TWO);
+
         assertThrows(DuplicateCardException.class, () -> {
-            game.isSecondCardStronger(firstPlayersCard, secondPlayersCard);
+            game.isSecondCardStronger(firstCard, secondCard);
         });
     }
 }
