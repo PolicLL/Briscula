@@ -60,7 +60,7 @@ public class Card {
         return this.cardValue.getPoints();
     }
 
-
-
-
+    public CardValue getCardValue() {
+        return cardValue;
+    }
 }

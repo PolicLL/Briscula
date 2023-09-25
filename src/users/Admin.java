@@ -13,10 +13,13 @@ import java.util.Random;
 public class Admin {
 
     private final Random random = new Random();
-
     private CardType mainCardType;
+    private int indexOfCurrentPlayer = 0;
 
     public List<List<Card>> dealCards(Deck deck, GameOptions gameOptions){
+
+        prepareDeck(deck, gameOptions);
+
         List<List<Card>> playersCardsList = new ArrayList<>();
         List<Card> deckCards = deck.getDeckCards();
 
@@ -38,9 +41,50 @@ public class Admin {
         return playersCardsList;
     }
 
-    private void chooseMainCardType(){
+    public void prepareDeck(Deck deck, GameOptions gameOptions){
+        if(gameOptions == GameOptions.THREE_PLAYERS)
+            deck.removeOneWithCardValueTwo();
+    }
+
+    public List<Player> initializePlayers(Deck deck, GameOptions gameOptions) {
+        List<List<Card>> listPlayersCards = dealCards(deck, gameOptions);
+        List<Player> players = new ArrayList<>();
+
+        for(int i = 0; i < gameOptions.getNumberOfPlayers(); ++i){
+            players.add(new Player(listPlayersCards.get(i), "Name " + i));
+        }
+
+        chooseStartingPlayer(players);
+
+        return players;
+    }
+
+    public void chooseMainCardType(){
         CardType[] cardTypes = CardType.values();
         mainCardType = cardTypes[random.nextInt(cardTypes.length)];
+    }
+
+    public void dealNextRound(Deck deck, List<Player> players){
+        if(deck.getNumberOfDeckCards() == 0) return;
+
+        for(int i = 0; i < players.size(); ++i){
+            players.get(i).addCard(deck.removeOneCard());
+        }
+    }
+
+    private void chooseStartingPlayer(List<Player> players){
+        indexOfCurrentPlayer = random.nextInt(players.size());
+    }
+
+    public void findNextPlayer(List<Player> players){
+        ++indexOfCurrentPlayer;
+
+        if(indexOfCurrentPlayer >= players.size())
+            indexOfCurrentPlayer = 0;
+    }
+
+    public int getIndexOfCurrentPlayer() {
+        return indexOfCurrentPlayer;
     }
 
     public CardType getMainCardType() {

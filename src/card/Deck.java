@@ -31,6 +31,17 @@ public class Deck {
         return deckCards.remove(random.nextInt(deckCards.size()));
     }
 
+    public Card removeOneWithCardValueTwo(){
+        int index = -1;
+        do
+        {
+            index = random.nextInt(deckCards.size());
+        }
+        while(deckCards.get(index).getCardValue() != CardValue.TWO);
+
+        return deckCards.remove(index);
+    }
+
     public List<Card> getDeckCards() {
         return deckCards;
     }

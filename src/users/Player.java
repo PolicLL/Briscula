@@ -41,6 +41,10 @@ public class Player {
 
     //
 
+    public void addCard(Card card){
+        this.playerCards.add(card);
+    }
+
 
     public int getPoints() {
         return points;

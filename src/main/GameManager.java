@@ -13,16 +13,10 @@ public class GameManager {
     private Admin admin;
     private Deck deck;
     private GameOptions gameOptions;
-
-    private Random random = new Random();
-
-    private int indexOfCurrentPlayer = 0;
-
     private GameJudge gameJudge;
 
     public GameManager(GameOptions gameOptions) {
         initializeValues(gameOptions);
-
         prepareGame(gameOptions);
     }
 
@@ -33,37 +27,12 @@ public class GameManager {
         admin = new Admin();
         players = new ArrayList<>();
         gameJudge = new GameJudge(admin);
-
         this.gameOptions = gameOptions;
-
     }
 
-    private void prepareGame(GameOptions gameOptions){
-        prepareDeck();
-
-        List<List<Card>> playersCards =  admin.dealCards(deck, gameOptions);
-
-        initializePlayers(gameOptions, playersCards);
-        chooseStartingPlayer();
-    }
-
-    private void prepareDeck(){
-        if(gameOptions == GameOptions.THREE_PLAYERS)
-            deck.removeOneCard();
-    }
-
-    private void initializePlayers(GameOptions gameOptions, List<List<Card>> playersCards) {
-        for(int i = 0; i < gameOptions.getNumberOfPlayers(); ++i){
-            addPlayer(new Player(playersCards.get(i), "Name " + i));
-        }
-    }
-
-    private void chooseStartingPlayer(){
-        indexOfCurrentPlayer = random.nextInt(this.players.size());
-    }
-
-    private void addPlayer(Player player){
-        this.players.add(player);
+    public void prepareGame(GameOptions gameOptions){
+        players = admin.initializePlayers(deck, gameOptions);
+        admin.chooseMainCardType();
     }
 
     // GAME
@@ -93,33 +62,36 @@ public class GameManager {
         Queue<Move> queueMoves = new ArrayDeque<>();
 
         for(int i = 0; i < gameOptions.getNumberOfPlayers(); ++i){
-            tempPlayer = players.get(indexOfCurrentPlayer);
+            tempPlayer = players.get(admin.getIndexOfCurrentPlayer());
 
             Card tempCard = tempPlayer.playRound();
 
             queueMoves.add(new Move(tempPlayer, tempCard));
 
-            findNextPlayer();
+            admin.findNextPlayer(players);
         }
 
         gameJudge.calculateRound(queueMoves);
 
-        dealNextRound();
+        admin.dealNextRound(deck, players);
+
+        printPlayersValues();
+
     }
 
-    private void dealNextRound(){
-        if(this.deck.getNumberOfDeckCards() == 0) return;
-
-        for(int i = 0; i < players.size(); ++i){
-            players.get(i).getPlayerCards().add(deck.removeOneCard());
+    private void printStateAfterRound( Queue<Move> queueMoves){
+        for(Move tempMove : queueMoves){
+            tempMove.player().getPlayerCards().forEach(e -> System.out.print(e + " "));
+            System.out.print("POINTS : " + tempMove.player().getPoints() + " ");
+            System.out.println();
         }
+        System.out.println();
+        System.out.println();
     }
 
-
-    private void findNextPlayer(){
-        ++indexOfCurrentPlayer;
-
-        if(indexOfCurrentPlayer >= players.size())
-            indexOfCurrentPlayer = 0;
+    private void printPlayersValues(){
+        players.forEach(e -> System.out.println(e.getPoints()));
+        System.out.println();
     }
+
 }
