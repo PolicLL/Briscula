@@ -27,8 +27,8 @@ public class Deck {
     }
 
 
-    public void removeOneCard(){
-        deckCards.remove(random.nextInt(deckCards.size()));
+    public Card removeOneCard(){
+        return deckCards.remove(random.nextInt(deckCards.size()));
     }
 
     public List<Card> getDeckCards() {

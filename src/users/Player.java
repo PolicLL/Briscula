@@ -46,6 +46,10 @@ public class Player {
         return points;
     }
 
+    public List<Card> getPlayerCards() {
+        return playerCards;
+    }
+
     public void setPointsToZero(){
         this.points = 0;
     }

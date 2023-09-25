@@ -4,11 +4,10 @@ import card.Card;
 import card.CardType;
 import card.CardValue;
 import exceptions.DuplicateCardException;
-import main.Game;
+import main.GameJudge;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import other.GameOptions;
 import users.Admin;
 
 import static org.mockito.Mockito.mock;
@@ -24,7 +23,7 @@ import static org.testng.Assert.assertThrows;
 
 public class CardTest {
 
-    private Game game;
+    private GameJudge gameJudge;
     private CardType mainCardType = CardType.COPPE;
     private Card firstCard, secondCard;
 
@@ -33,8 +32,7 @@ public class CardTest {
         Admin adminMock = mock(Admin.class);
         when(adminMock.getMainCardType()).thenReturn(mainCardType);
 
-        game = new Game(GameOptions.TWO_PLAYERS);
-        game.setAdmin(adminMock);
+        gameJudge = new GameJudge(adminMock);
 
         firstCard = new Card();
         secondCard = new Card();
@@ -70,14 +68,14 @@ public class CardTest {
 
         // ASSERTS
 
-        assertFalse(game.isSecondCardStronger(firstCard, secondCard));
+        assertFalse(gameJudge.isSecondCardStronger(firstCard, secondCard));
 
         secondCard.setCardType(CardType.SPADE);
         secondCard.setCardValue(CardValue.THREE);
-        assertFalse(game.isSecondCardStronger(firstCard, secondCard));
+        assertFalse(gameJudge.isSecondCardStronger(firstCard, secondCard));
 
         firstCard.setCardValue(CardValue.JACK);
-        Assert.assertTrue(game.isSecondCardStronger(firstCard, secondCard));
+        Assert.assertTrue(gameJudge.isSecondCardStronger(firstCard, secondCard));
     }
 
     @Test
@@ -90,11 +88,11 @@ public class CardTest {
 
         // ASSERTS
 
-        assertFalse(game.isSecondCardStronger(firstCard, secondCard));
+        assertFalse(gameJudge.isSecondCardStronger(firstCard, secondCard));
 
         secondCard.setCardType(CardType.SPADE);
         secondCard.setCardValue(CardValue.THREE);
-        assertFalse(game.isSecondCardStronger(firstCard, secondCard));
+        assertFalse(gameJudge.isSecondCardStronger(firstCard, secondCard));
     }
 
     @Test
@@ -107,10 +105,10 @@ public class CardTest {
 
         // ASSERTS
 
-        Assert.assertTrue(game.isSecondCardStronger(firstCard, secondCard));
+        Assert.assertTrue(gameJudge.isSecondCardStronger(firstCard, secondCard));
 
         secondCard.setCardValue(CardValue.TWO);
-        Assert.assertTrue(game.isSecondCardStronger(firstCard, secondCard));
+        Assert.assertTrue(gameJudge.isSecondCardStronger(firstCard, secondCard));
     }
 
     @Test
@@ -123,10 +121,10 @@ public class CardTest {
 
         // ASSERTS
 
-        Assert.assertTrue(game.isSecondCardStronger(firstCard, secondCard));
+        Assert.assertTrue(gameJudge.isSecondCardStronger(firstCard, secondCard));
 
         firstCard.setCardValue(CardValue.ACE);
-        assertFalse(game.isSecondCardStronger(firstCard, secondCard));
+        assertFalse(gameJudge.isSecondCardStronger(firstCard, secondCard));
     }
 
     @Test
@@ -138,7 +136,7 @@ public class CardTest {
         secondCard.setCardValue(CardValue.TWO);
 
         assertThrows(DuplicateCardException.class, () -> {
-            game.isSecondCardStronger(firstCard, secondCard);
+            gameJudge.isSecondCardStronger(firstCard, secondCard);
         });
     }
 }

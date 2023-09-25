@@ -1,9 +1,7 @@
 package main;
 
 import card.Card;
-import card.CardType;
 import card.Deck;
-import exceptions.DuplicateCardException;
 import other.GameOptions;
 import users.Admin;
 import users.Player;
@@ -21,6 +19,8 @@ public class Game {
 
     private int indexOfCurrentPlayer = 0;
 
+    private GameJudge gameJudge;
+
     public Game(GameOptions gameOptions) {
         initializeValues(gameOptions);
 
@@ -33,8 +33,10 @@ public class Game {
         deck = new Deck();
         admin = new Admin();
         players = new ArrayList<>();
+        gameJudge = new GameJudge(admin);
 
         this.gameOptions = gameOptions;
+
     }
 
     private void prepareGame(GameOptions gameOptions){
@@ -68,7 +70,7 @@ public class Game {
     // GAME
 
     public void startGame(){
-        while(isGameOver()){
+        while(!isGameOver()){
             playRound();
         }
     }
@@ -87,7 +89,7 @@ public class Game {
     }
 
     private void playRound(){
-        Player tempPlayer = null;
+        Player tempPlayer;
 
         Queue<Move> queueMoves = new ArrayDeque<>();
 
@@ -101,7 +103,36 @@ public class Game {
             findNextPlayer();
         }
 
-        calculateRound(queueMoves);
+        gameJudge.calculateRound(queueMoves);
+
+        dealNextRound();
+
+        printStateAfterRound(queueMoves);
+
+        printPlayersValues();
+    }
+
+    private void dealNextRound(){
+        if(this.deck.getNumberOfDeckCards() == 0) return;
+
+        for(int i = 0; i < players.size(); ++i){
+            players.get(i).getPlayerCards().add(deck.removeOneCard());
+        }
+    }
+
+    private void printStateAfterRound( Queue<Move> queueMoves){
+        for(Move tempMove : queueMoves){
+            tempMove.player().getPlayerCards().forEach(e -> System.out.print(e + " "));
+            System.out.print("POINTS : " + tempMove.player().getPoints() + " ");
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println();
+    }
+
+    private void printPlayersValues(){
+        players.forEach(e -> System.out.println(e.getPoints()));
+        System.out.println();
     }
 
     private void findNextPlayer(){
@@ -109,74 +140,6 @@ public class Game {
 
         if(indexOfCurrentPlayer >= players.size())
             indexOfCurrentPlayer = 0;
-    }
-
-    public void calculateRound(Queue<Move> queueMoves)  {
-        int tempPointsInRound = 0;
-
-        Move roundWinnerMove = queueMoves.remove();
-        tempPointsInRound += roundWinnerMove.card().getPoints();
-
-        while(!queueMoves.isEmpty()){
-            Move tempMove = queueMoves.remove();
-
-            tempPointsInRound += tempMove.card().getPoints();
-
-            try {
-                if(isSecondCardStronger(roundWinnerMove.card(), tempMove.card()))
-                    roundWinnerMove = tempMove;
-            } catch (DuplicateCardException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        roundWinnerMove.player().incrementPoints(tempPointsInRound);
-    }
-
-/*
-    public boolean isSecondCardStronger(Card firstPlayersCard, Card secondPlayersCard){
-        CardType mainCardType = admin.getMainCardType();
-
-        if(firstPlayersCard.isMainType(mainCardType)) {
-            if(!secondPlayersCard.isMainType(mainCardType)) return false;
-        }
-        else {
-            if(secondPlayersCard.isMainType(mainCardType)) {
-                return false;
-            }
-        }
-
-        if(firstPlayersCard.isSameType(secondPlayersCard)) return firstPlayersCard.isCardValueBiggerThan(secondPlayersCard);
-
-        return true;
-    }
- */
-
-    public boolean isSecondCardStronger(Card firstPlayersCard, Card secondPlayersCard) throws DuplicateCardException {
-        CardType mainCardType = admin.getMainCardType();
-
-        if(firstPlayersCard.equals(secondPlayersCard))
-            throw new DuplicateCardException();
-
-        if(!firstPlayersCard.isMainType(mainCardType) && secondPlayersCard.isMainType(mainCardType)){
-            return true;
-        }
-        else if(firstPlayersCard.isMainType(mainCardType) && secondPlayersCard.isMainType(mainCardType)){
-            return secondPlayersCard.isCardValueBiggerThan(firstPlayersCard);
-        }
-
-        else if(firstPlayersCard.isSameType(secondPlayersCard)){
-            return secondPlayersCard.isCardValueBiggerThan(firstPlayersCard);
-        }
-
-        return false;
-    }
-
-    //
-
-
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
     }
 
     @Override

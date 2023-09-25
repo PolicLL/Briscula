@@ -1,4 +1,5 @@
-import card.CardType;
+import main.Game;
+import other.GameOptions;
 
 public class Briskula {
 
@@ -42,9 +43,9 @@ public class Briskula {
          */
 
 
-        CardType test = CardType.DENARI;
+        Game game = new Game(GameOptions.FOUR_PLAYERS);
 
-        System.out.println(test == CardType.DENARI);
+        game.startGame();
 
     }
 }

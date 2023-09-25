@@ -3,14 +3,13 @@ package test;
 import card.Card;
 import card.CardType;
 import card.CardValue;
-import main.Game;
+import main.GameJudge;
 import main.Move;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import other.GameOptions;
 import users.Admin;
 import users.Player;
 
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.mock;
 
 public class GameTest {
 
-    private Game game;
+    private GameJudge gameJudge;
     private Queue<Move> queueMoves = new ArrayDeque<>();
     private List<Player> playerList = new ArrayList<>(Arrays.asList(
             new Player(new ArrayList<>(), "Name 1"), new Player(new ArrayList<>(), "Name 2"),
@@ -44,8 +43,7 @@ public class GameTest {
         Admin adminMock = mock(Admin.class);
         Mockito.when(adminMock.getMainCardType()).thenAnswer((Answer<CardType>) invocation -> mainCardType);
 
-        game = new main.Game(GameOptions.TWO_PLAYERS);
-        game.setAdmin(adminMock);
+        gameJudge = new GameJudge(adminMock);
 
         setPlayersPointsToZero();
     }
@@ -150,6 +148,6 @@ public class GameTest {
         queueMoves.add(movesList.get(2));
         queueMoves.add(movesList.get(3));
 
-        game.calculateRound(queueMoves);
+        gameJudge.calculateRound(queueMoves);
     }
 }
