@@ -15,10 +15,6 @@ public class GameJudge {
         this.admin = admin;
     }
 
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
-    }
-
     public void calculateRound(Queue<Move> queueMoves)  {
         int tempPointsInRound = 0;
 

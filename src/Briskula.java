@@ -1,5 +1,4 @@
 import main.Game;
-import main.GameManager;
 import other.GameOptions;
 
 public class Briskula {
@@ -46,9 +45,8 @@ public class Briskula {
 
         Game game = new Game(GameOptions.FOUR_PLAYERS);
 
-        GameManager gameManager = new GameManager(GameOptions.FOUR_PLAYERS);
+        game.startGame();
 
-        gameManager.startGame();
 
     }
 }

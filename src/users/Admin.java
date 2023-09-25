@@ -13,32 +13,20 @@ import java.util.Random;
 public class Admin {
 
     private final Random random = new Random();
-    private CardType mainCardType;
     private int indexOfCurrentPlayer = 0;
+    private CardType mainCardType;
+    private List<Player> players;
+    private Deck deck;
 
-    public List<List<Card>> dealCards(Deck deck, GameOptions gameOptions){
+    public Admin() {
+        deck = new Deck();
+    }
 
+    public void prepareDeckAndPlayers(GameOptions gameOptions){
         prepareDeck(deck, gameOptions);
-
-        List<List<Card>> playersCardsList = new ArrayList<>();
-        List<Card> deckCards = deck.getDeckCards();
-
-        int startNumberOfCards = getStartNumberOfCards(gameOptions);
-
-        for(int i = 0; i < gameOptions.getNumberOfPlayers(); ++i){
-
-            playersCardsList.add(new LinkedList<>());
-
-            for(int j = 0; j < startNumberOfCards; ++j){
-                Card tempCard = deckCards.get(random.nextInt(deckCards.size()));
-                deckCards.remove(tempCard);
-                playersCardsList.get(i).add(tempCard);
-            }
-        }
-
+        initializePlayers(gameOptions);
         chooseMainCardType();
-
-        return playersCardsList;
+        chooseStartingPlayer();
     }
 
     public void prepareDeck(Deck deck, GameOptions gameOptions){
@@ -46,17 +34,37 @@ public class Admin {
             deck.removeOneWithCardValueTwo();
     }
 
-    public List<Player> initializePlayers(Deck deck, GameOptions gameOptions) {
+    private void initializePlayers(GameOptions gameOptions) {
         List<List<Card>> listPlayersCards = dealCards(deck, gameOptions);
-        List<Player> players = new ArrayList<>();
+        this.players = new ArrayList<>();
 
         for(int i = 0; i < gameOptions.getNumberOfPlayers(); ++i){
             players.add(new Player(listPlayersCards.get(i), "Name " + i));
         }
+    }
 
-        chooseStartingPlayer(players);
+    public List<List<Card>> dealCards(Deck deck, GameOptions gameOptions){
+        List<List<Card>> playersCardsList = new ArrayList<>();
+        List<Card> deckCards = deck.getDeckCards();
 
-        return players;
+        int NUMBER_OF_CARDS_PER_PLAYER = getStartNumberOfCards(gameOptions);
+
+        for(int i = 0; i < gameOptions.getNumberOfPlayers(); ++i){
+
+            playersCardsList.add(new LinkedList<>());
+
+            for(int j = 0; j < NUMBER_OF_CARDS_PER_PLAYER; ++j){
+                Card tempCard = deckCards.get(random.nextInt(deckCards.size()));
+                deckCards.remove(tempCard);
+                playersCardsList.get(i).add(tempCard);
+            }
+        }
+
+        return playersCardsList;
+    }
+
+    private void chooseStartingPlayer(){
+        indexOfCurrentPlayer = random.nextInt(players.size());
     }
 
     public void chooseMainCardType(){
@@ -64,7 +72,7 @@ public class Admin {
         mainCardType = cardTypes[random.nextInt(cardTypes.length)];
     }
 
-    public void dealNextRound(Deck deck, List<Player> players){
+    public void dealNextRound(){
         if(deck.getNumberOfDeckCards() == 0) return;
 
         for(int i = 0; i < players.size(); ++i){
@@ -72,23 +80,29 @@ public class Admin {
         }
     }
 
-    private void chooseStartingPlayer(List<Player> players){
-        indexOfCurrentPlayer = random.nextInt(players.size());
-    }
-
-    public void findNextPlayer(List<Player> players){
+    private void findNextPlayer(){
         ++indexOfCurrentPlayer;
 
         if(indexOfCurrentPlayer >= players.size())
             indexOfCurrentPlayer = 0;
     }
 
-    public int getIndexOfCurrentPlayer() {
-        return indexOfCurrentPlayer;
+    public Player getCurrentPlayer(){
+        Player currentPlayer = players.get(indexOfCurrentPlayer);
+        findNextPlayer();
+        return currentPlayer;
     }
 
     public CardType getMainCardType() {
         return mainCardType;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public Deck getDeck() {
+        return deck;
     }
 
     private int getStartNumberOfCards(GameOptions gameOptions){
