@@ -11,7 +11,6 @@ public abstract class AbstractPlayer {
 
     protected int points = 0;
 
-
     public AbstractPlayer(List<Card> playerCards, String nickname) {
         this.playerCards = playerCards;
         this.nickname = nickname;

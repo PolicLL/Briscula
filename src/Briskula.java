@@ -1,4 +1,4 @@
-import main.Game;
+import game.Game;
 import other.GameOptions;
 
 public class Briskula {

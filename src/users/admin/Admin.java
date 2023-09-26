@@ -34,7 +34,7 @@ public class Admin {
         System.out.println("STARTING PLAYER : " + indexOfCurrentPlayer);
     }
 
-    public void prepareDeck(Deck deck, GameOptions gameOptions){
+    private void prepareDeck(Deck deck, GameOptions gameOptions){
         if(gameOptions == GameOptions.THREE_PLAYERS)
             deck.removeOneWithCardValueTwo();
     }
@@ -51,7 +51,7 @@ public class Admin {
         players.add(new RealPlayer(listPlayersCards.get(3), "Name 3"));
     }
 
-    public List<List<Card>> dealCards(Deck deck, GameOptions gameOptions){
+    private List<List<Card>> dealCards(Deck deck, GameOptions gameOptions){
         List<List<Card>> playersCardsList = new ArrayList<>();
         List<Card> deckCards = deck.getDeckCards();
 
@@ -75,7 +75,7 @@ public class Admin {
         indexOfCurrentPlayer = random.nextInt(players.size());
     }
 
-    public void chooseMainCardType(){
+    private void chooseMainCardType(){
         CardType[] cardTypes = CardType.values();
         mainCardType = cardTypes[random.nextInt(cardTypes.length)];
     }

@@ -4,7 +4,7 @@ import card.Card;
 import card.CardType;
 import card.CardValue;
 import exceptions.DuplicateCardException;
-import main.GameJudge;
+import game.GameJudge;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
