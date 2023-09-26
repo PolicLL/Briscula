@@ -8,7 +8,7 @@ import main.GameJudge;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import users.Admin;
+import users.admin.Admin;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

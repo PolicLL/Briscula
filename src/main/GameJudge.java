@@ -3,7 +3,7 @@ package main;
 import card.Card;
 import card.CardType;
 import exceptions.DuplicateCardException;
-import users.Admin;
+import users.admin.Admin;
 
 import java.util.Queue;
 

@@ -2,8 +2,8 @@ package main;
 
 import card.Card;
 import other.GameOptions;
-import users.Admin;
-import users.Player;
+import users.admin.Admin;
+import users.players.AbstractPlayer;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -39,7 +39,7 @@ public class GameManager {
     }
 
     private boolean arePlayersDone(){
-        for(Player tempPlayer : admin.getPlayers())
+        for(AbstractPlayer tempPlayer : admin.getPlayers())
             if(!tempPlayer.isPlayerDone())
                 return false;
 
@@ -49,7 +49,7 @@ public class GameManager {
     // Round play
 
     public void playRound(){
-        Player tempPlayer;
+        AbstractPlayer tempPlayer;
 
         Queue<Move> queueMoves = new ArrayDeque<>();
 

@@ -1,9 +1,12 @@
-package users;
+package users.admin;
 
 import card.Card;
 import card.CardType;
 import card.Deck;
 import other.GameOptions;
+import users.players.AbstractPlayer;
+import users.players.Bot;
+import users.players.RealPlayer;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,7 +18,7 @@ public class Admin {
     private final Random random = new Random();
     private int indexOfCurrentPlayer = 0;
     private CardType mainCardType;
-    private List<Player> players;
+    private List<AbstractPlayer> players;
     private Deck deck;
 
     public Admin() {
@@ -41,8 +44,11 @@ public class Admin {
         this.players = new ArrayList<>();
 
         for(int i = 0; i < gameOptions.getNumberOfPlayers(); ++i){
-            players.add(new Player(listPlayersCards.get(i), "Name " + i));
+            players.add(new Bot(listPlayersCards.get(i), "Name " + i));
         }
+
+        players.remove(3);
+        players.add(new RealPlayer(listPlayersCards.get(3), "Name 3"));
     }
 
     public List<List<Card>> dealCards(Deck deck, GameOptions gameOptions){
@@ -89,8 +95,8 @@ public class Admin {
             indexOfCurrentPlayer = 0;
     }
 
-    public Player getCurrentPlayer(){
-        Player currentPlayer = players.get(indexOfCurrentPlayer);
+    public AbstractPlayer getCurrentPlayer(){
+        AbstractPlayer currentPlayer = players.get(indexOfCurrentPlayer);
         findNextPlayer();
         return currentPlayer;
     }
@@ -99,7 +105,7 @@ public class Admin {
         return mainCardType;
     }
 
-    public List<Player> getPlayers() {
+    public List<AbstractPlayer> getPlayers() {
         return players;
     }
 

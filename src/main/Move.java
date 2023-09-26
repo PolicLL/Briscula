@@ -1,9 +1,9 @@
 package main;
 
 import card.Card;
-import users.Player;
+import users.players.AbstractPlayer;
 
-public record Move(Player player, Card card) {
+public record Move(AbstractPlayer player, Card card) {
     @Override
     public String toString() {
         return player.toString() + " " + card.toString();
