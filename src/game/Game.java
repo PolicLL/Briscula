@@ -1,13 +1,14 @@
 package game;
 
-import other.GameOptions;
+import other.GameMode;
+import other.GameOptionNumberOfPlayers;
 
 public class Game {
 
     private GameManager gameManager;
 
-    public Game(GameOptions gameOptions) {
-        gameManager = new GameManager(gameOptions);
+    public Game(GameOptionNumberOfPlayers gameOptions, GameMode gameMode) {
+        gameManager = new GameManager(gameOptions, gameMode);
     }
 
     public void startGame(){

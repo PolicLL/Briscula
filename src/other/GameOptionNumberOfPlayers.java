@@ -1,6 +1,6 @@
 package other;
 
-public enum GameOptions {
+public enum GameOptionNumberOfPlayers {
     TWO_PLAYERS, THREE_PLAYERS, FOUR_PLAYERS;
 
     public int getNumberOfPlayers(){

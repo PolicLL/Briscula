@@ -1,7 +1,8 @@
 package game;
 
 import card.Card;
-import other.GameOptions;
+import other.GameMode;
+import other.GameOptionNumberOfPlayers;
 import users.admin.Admin;
 import users.players.AbstractPlayer;
 
@@ -9,27 +10,27 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class GameManager {
-    private GameOptions gameOptions;
+    private GameOptionNumberOfPlayers gameOptions;
     private Admin admin;
     private GameJudge gameJudge;
 
-    public GameManager(GameOptions gameOptions) {
+    public GameManager(GameOptionNumberOfPlayers gameOptions, GameMode gameMode) {
         initializeValues(gameOptions);
-        prepareGame(gameOptions);
+        prepareGame(gameOptions, gameMode);
 
         System.out.println("Main card type : " + admin.getMainCardType());
     }
 
     // INITIALIZATION
 
-    private void initializeValues(GameOptions gameOptions){
+    private void initializeValues(GameOptionNumberOfPlayers gameOptions){
         this.gameOptions = gameOptions;
         admin = new Admin();
         gameJudge = new GameJudge(admin);
     }
 
-    private void prepareGame(GameOptions gameOptions){
-        admin.prepareDeckAndPlayers(gameOptions);
+    private void prepareGame(GameOptionNumberOfPlayers gameOptions, GameMode gameMode){
+        admin.prepareDeckAndPlayers(gameOptions, gameMode);
     }
 
     // End of game checking

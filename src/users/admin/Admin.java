@@ -3,7 +3,8 @@ package users.admin;
 import card.Card;
 import card.CardType;
 import card.Deck;
-import other.GameOptions;
+import other.GameMode;
+import other.GameOptionNumberOfPlayers;
 import users.players.AbstractPlayer;
 import users.players.Bot;
 import users.players.RealPlayer;
@@ -21,38 +22,56 @@ public class Admin {
     private List<AbstractPlayer> players;
     private Deck deck;
 
+    private List<List<Card>> playersCardsList;
+
     public Admin() {
         deck = new Deck();
     }
 
-    public void prepareDeckAndPlayers(GameOptions gameOptions){
+    public void prepareDeckAndPlayers(GameOptionNumberOfPlayers gameOptions, GameMode gameMode){
         prepareDeck(deck, gameOptions);
-        initializePlayers(gameOptions);
+        initializePlayers(gameOptions, gameMode);
         chooseMainCardType();
         chooseStartingPlayer();
 
         System.out.println("STARTING PLAYER : " + indexOfCurrentPlayer);
     }
 
-    private void prepareDeck(Deck deck, GameOptions gameOptions){
-        if(gameOptions == GameOptions.THREE_PLAYERS)
+    private void prepareDeck(Deck deck, GameOptionNumberOfPlayers gameOptions){
+        if(gameOptions == GameOptionNumberOfPlayers.THREE_PLAYERS)
             deck.removeOneWithCardValueTwo();
     }
 
-    private void initializePlayers(GameOptions gameOptions) {
-        List<List<Card>> listPlayersCards = dealCards(deck, gameOptions);
+    private void initializePlayers(GameOptionNumberOfPlayers gameOptions,  GameMode gameMode) {
+        dealCards(deck, gameOptions);
+
+        if(gameMode == GameMode.ALL_BOTS)
+            addBotPlayers(gameOptions);
+        else if(gameMode == GameMode.BOTS_AND_HUMAN)
+            addBotPlayersAndHuman(gameOptions);
+    }
+
+    private void addBotPlayers(GameOptionNumberOfPlayers gameOptions){
         this.players = new ArrayList<>();
 
         for(int i = 0; i < gameOptions.getNumberOfPlayers(); ++i){
-            players.add(new Bot(listPlayersCards.get(i), "Name " + i));
+            players.add(new Bot(playersCardsList.get(i), "Name " + i));
         }
-
-        players.remove(3);
-        players.add(new RealPlayer(listPlayersCards.get(3), "Name 3"));
     }
 
-    private List<List<Card>> dealCards(Deck deck, GameOptions gameOptions){
-        List<List<Card>> playersCardsList = new ArrayList<>();
+    private void addBotPlayersAndHuman(GameOptionNumberOfPlayers gameOptions){
+        addBotPlayers(gameOptions);
+        addOneHumanPlayer(playersCardsList, "Human Player");
+
+    }
+
+    private void addOneHumanPlayer(List<List<Card>> listPlayersCards, String name){
+        players.remove(players.size() - 1);
+        players.add(new RealPlayer(listPlayersCards.get(listPlayersCards.size() - 1), name));
+    }
+
+    private void dealCards(Deck deck, GameOptionNumberOfPlayers gameOptions){
+        playersCardsList = new ArrayList<>();
         List<Card> deckCards = deck.getDeckCards();
 
         int NUMBER_OF_CARDS_PER_PLAYER = getStartNumberOfCards(gameOptions);
@@ -67,8 +86,6 @@ public class Admin {
                 playersCardsList.get(i).add(tempCard);
             }
         }
-
-        return playersCardsList;
     }
 
     private void chooseStartingPlayer(){
@@ -113,7 +130,7 @@ public class Admin {
         return deck;
     }
 
-    private int getStartNumberOfCards(GameOptions gameOptions){
+    private int getStartNumberOfCards(GameOptionNumberOfPlayers gameOptions){
         return switch (gameOptions){
             case TWO_PLAYERS, FOUR_PLAYERS -> 4;
             case THREE_PLAYERS -> 3;
