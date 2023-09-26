@@ -136,6 +136,52 @@ public class GameTest {
         Assert.assertEquals(12, playerList.get(3).getPoints());
     }
 
+    @Test
+    public void TestTemp() {
+
+        mainCardType = CardType.COPPE;
+
+        cardsList.get(0).setCardType(CardType.BASTONI);
+        cardsList.get(0).setCardValue(CardValue.KING);
+
+        cardsList.get(1).setCardType(CardType.BASTONI);
+        cardsList.get(1).setCardValue(CardValue.FIVE);
+
+        cardsList.get(2).setCardType(CardType.COPPE);
+        cardsList.get(2).setCardValue(CardValue.SEVEN);
+
+        cardsList.get(3).setCardType(CardType.BASTONI);
+        cardsList.get(3).setCardValue(CardValue.TWO);
+
+        addMovesAndCalculateRound();
+
+        Assert.assertEquals( playerList.get(2).getPoints(), 4);
+    }
+
+    @Test
+    public void TestTemp2() {
+
+        mainCardType = CardType.BASTONI;
+
+        cardsList.get(0).setCardType(CardType.SPADE);
+        cardsList.get(0).setCardValue(CardValue.KNIGHT);
+
+        cardsList.get(1).setCardType(CardType.SPADE);
+        cardsList.get(1).setCardValue(CardValue.ACE);
+
+        cardsList.get(2).setCardType(CardType.COPPE);
+        cardsList.get(2).setCardValue(CardValue.FOUR);
+
+        cardsList.get(3).setCardType(CardType.SPADE);
+        cardsList.get(3).setCardValue(CardValue.SIX);
+
+        addMovesAndCalculateRound();
+
+        printPlayers();
+
+        Assert.assertEquals( playerList.get(1).getPoints(), 14);
+    }
+
     private void printPlayers(){
         playerList.forEach(element -> System.out.println(element.getPoints()));
     }

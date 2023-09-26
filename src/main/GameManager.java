@@ -16,6 +16,8 @@ public class GameManager {
     public GameManager(GameOptions gameOptions) {
         initializeValues(gameOptions);
         prepareGame(gameOptions);
+
+        System.out.println("Main card type : " + admin.getMainCardType());
     }
 
     // INITIALIZATION
@@ -55,27 +57,27 @@ public class GameManager {
             tempPlayer = admin.getCurrentPlayer();
             Card tempCard = tempPlayer.playRound();
             queueMoves.add(new Move(tempPlayer, tempCard));
+
+            System.out.println("Temp move : " + i + " -> " + tempPlayer.getNickname() + " | " + tempCard);
         }
+
+        //printPlayersCard(queueMoves);
 
         gameJudge.calculateRound(queueMoves);
         admin.dealNextRound();
+
         printPlayersValues();
     }
 
     // Prints
 
-    private void printStateAfterRound( Queue<Move> queueMoves){
-        for(Move tempMove : queueMoves){
-            tempMove.player().getPlayerCards().forEach(e -> System.out.print(e + " "));
-            System.out.print("POINTS : " + tempMove.player().getPoints() + " ");
-            System.out.println();
-        }
-        System.out.println();
+    private void printPlayersCard(Queue<Move> queueMoves){
+        queueMoves.forEach(e ->  System.out.println(e.card()));
         System.out.println();
     }
 
     private void printPlayersValues(){
-        //players.forEach(e -> System.out.println(e.getPoints()));
+        admin.getPlayers().forEach(e -> System.out.println("[" + e.getNickname() + "] : " + e.getPoints()));
         System.out.println();
     }
 

@@ -27,6 +27,8 @@ public class Admin {
         initializePlayers(gameOptions);
         chooseMainCardType();
         chooseStartingPlayer();
+
+        System.out.println("STARTING PLAYER : " + indexOfCurrentPlayer);
     }
 
     public void prepareDeck(Deck deck, GameOptions gameOptions){

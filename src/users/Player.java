@@ -50,6 +50,10 @@ public class Player {
         return points;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
     public List<Card> getPlayerCards() {
         return playerCards;
     }
